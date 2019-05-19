@@ -49,3 +49,17 @@ input[type="file"] {
 .Home .lander p {
   color: #999;
 }
+.NotFound {
+  padding-top: 100px;
+  text-align: center;
+}
+@media all and (min-width: 480px) {
+  .Login {
+    padding: 60px 0;
+  }
+
+  .Login form {
+    margin: 0 auto;
+    max-width: 320px;
+  }
+}
