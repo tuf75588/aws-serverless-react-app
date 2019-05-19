@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-function Navigation({ isAuthenticated, onNavClick }) {
+function Navigation({ isAuthenticated, onLogout }) {
   return (
     <div className='App container'>
       <Navbar fluid collapseOnSelect>
@@ -17,7 +17,7 @@ function Navigation({ isAuthenticated, onNavClick }) {
           <Nav pullRight>
             <LinkContainer to='/login'>
               {isAuthenticated ? (
-                <NavItem onClick={() => onNavClick(false)}>Logout</NavItem>
+                <NavItem onClick={onLogout}>Logout</NavItem>
               ) : (
                 <React.Fragment>
                   <LinkContainer to='/signup'>

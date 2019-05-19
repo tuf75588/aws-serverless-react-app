@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import { Auth } from "aws-amplify";
+import { Redirect } from "react-router-dom";
+import LoaderButton from "./LoaderButton";
 function Login(props) {
   const [fields, setFields] = useState({ email: "", password: "" });
-  useEffect(() => {
-    if (!props.isAuthenticated) {
-      setFields({ email: "", password: "" });
-    }
-  }, [props.isAuthenticated]);
+  const [shouldRedirect, setRedirect] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   function validateForm() {
     const { email, password } = fields;
     return email.length && password.length > 0;
@@ -18,17 +17,20 @@ function Login(props) {
   }
 
   async function handleSubmit(event) {
-    const { userHasAuthenticated } = props;
     event.preventDefault();
+    const { userHasAuthenticated } = props;
+    setLoading(true);
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
-      console.log("user has logged in!");
+      setRedirect(true);
     } catch (error) {
       alert("error", error);
     }
   }
-
+  if (shouldRedirect) {
+    return <Redirect to='/' />;
+  }
   return (
     <div className='Login'>
       <form onSubmit={handleSubmit}>
@@ -52,9 +54,15 @@ function Login(props) {
             onChange={handleInputChange}
           />
         </FormGroup>
-        <Button block bsSize='large' disabled={!validateForm()} type='submit'>
-          Login
-        </Button>
+        <LoaderButton
+          block
+          bsSize='large'
+          disabled={!validateForm()}
+          type='submit'
+          isLoading={isLoading}
+          text='Login'
+          loadingText='Logging in…'
+        />
       </form>
     </div>
   );
