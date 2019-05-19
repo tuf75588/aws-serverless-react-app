@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import { Auth } from "aws-amplify";
 function Login(props) {
   const [fields, setFields] = useState({ email: "", password: "" });
+  useEffect(() => {
+    if (!props.isAuthenticated) {
+      setFields({ email: "", password: "" });
+    }
+  }, [props.isAuthenticated]);
   function validateForm() {
     const { email, password } = fields;
     return email.length && password.length > 0;
@@ -10,10 +16,19 @@ function Login(props) {
     const { name, value } = event.target;
     setFields({ ...fields, [name]: value });
   }
-  function handleSubmit(event) {
+
+  async function handleSubmit(event) {
+    const { userHasAuthenticated } = props;
     event.preventDefault();
-    console.log("submitted!");
+    try {
+      await Auth.signIn(fields.email, fields.password);
+      userHasAuthenticated(true);
+      console.log("user has logged in!");
+    } catch (error) {
+      alert("error", error);
+    }
   }
+
   return (
     <div className='Login'>
       <form onSubmit={handleSubmit}>
