@@ -5,6 +5,7 @@ import config from "../config";
 import LoaderButton from "../components/LoaderButton";
 import { API } from "aws-amplify";
 import { s3Upload } from "../libs/awsLib";
+
 class NewNote extends React.Component {
   file = null;
   state = {

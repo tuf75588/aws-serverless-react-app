@@ -31,7 +31,6 @@ function App() {
   async function handleLogout(event) {
     await Auth.signOut();
     setAuthenticated(false);
-    this.props.history.push("/login");
   }
 
   const childProps = {
