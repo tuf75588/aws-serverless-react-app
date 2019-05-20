@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import LoaderButton from "./LoaderButton";
 function Login(props) {
   const [fields, setFields] = useState({ email: "", password: "" });
-  const [shouldRedirect, setRedirect] = useState(false);
+
   const [isLoading, setLoading] = useState(false);
   function validateForm() {
     const { email, password } = fields;
@@ -24,14 +24,11 @@ function Login(props) {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
       setFields({ email: "", password: "" });
-      setRedirect(true);
     } catch (error) {
       alert("error", error);
     }
   }
-  if (shouldRedirect) {
-    return <Redirect to='/' />;
-  }
+
   return (
     <div className='Login'>
       <form onSubmit={handleSubmit}>

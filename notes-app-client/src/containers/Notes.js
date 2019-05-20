@@ -94,12 +94,24 @@ class Notes extends React.Component {
       return;
     }
     this.setState({ isDeleting: true });
+    try {
+      await this.deleteNote();
+      this.props.history.push("/");
+    } catch (error) {
+      this.setState({ error });
+    }
   };
 
   getNote = () => {
     const { params } = this.props.match;
     return API.get("notes", `/notes/${params.id}`);
   };
+
+  //! deleting a note.
+  deleteNote = () => {
+    return API.del("notes", `/notes/${this.props.match.params.id}`);
+  };
+
   render() {
     const { error, note, isLoading, attachmentURL } = this.state;
     return (

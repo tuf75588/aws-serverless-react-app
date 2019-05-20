@@ -15,6 +15,7 @@ class Home extends React.Component {
     } catch (error) {
       alert(error);
     }
+    this.setState({ isLoading: false });
   }
   notes = () => {
     return API.get("notes", "/notes");
