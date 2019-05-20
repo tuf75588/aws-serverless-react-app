@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Routes from "./components/Routes";
 import { Auth } from "aws-amplify";
@@ -31,6 +31,7 @@ function App() {
   async function handleLogout(event) {
     await Auth.signOut();
     setAuthenticated(false);
+    this.props.history.push("/login");
   }
 
   const childProps = {
@@ -39,7 +40,7 @@ function App() {
   };
 
   return (
-    <Router>
+    <>
       <div className='container App'>
         <Navigation
           isAuthenticated={childProps.isAuthenticated}
@@ -50,8 +51,8 @@ function App() {
         </React.Suspense>
       </div>
       )
-    </Router>
+    </>
   );
 }
 
-export default App;
+export default withRouter(App);

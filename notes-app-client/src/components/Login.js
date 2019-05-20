@@ -23,6 +23,7 @@ function Login(props) {
     try {
       await Auth.signIn(fields.email, fields.password);
       userHasAuthenticated(true);
+      setFields({ email: "", password: "" });
       setRedirect(true);
     } catch (error) {
       alert("error", error);
