@@ -5,6 +5,8 @@ import { FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 //styles
 import "../stylesheets/Notes.css";
+
+import { s3Upload } from "../libs/awsLib";
 class Notes extends React.Component {
   file = null;
   state = {
@@ -35,6 +37,13 @@ class Notes extends React.Component {
     }
   }
 
+  //! method for saving changes to an existing note.
+  saveNote = (note) => {
+    return API.put("notes", `/notes/${this.props.match.params.id}`, {
+      body: note
+    });
+  };
+
   formatFilename = (str) => {
     return str.replace(/^\w+-/, "");
   };
@@ -52,7 +61,9 @@ class Notes extends React.Component {
     this.file = event.target.file[0];
   };
   handleSubmit = async (event) => {
+    let attachment;
     event.preventDefault();
+    const { content } = this.state;
     if (this.file && this.file.size > config.MAX_ATTACHMENT_SIZE) {
       alert(
         `Please pick a file smaller than ${config.MAX_ATTACHMENT_SIZE /
@@ -61,6 +72,18 @@ class Notes extends React.Component {
       return;
     }
     this.setState({ isLoading: true });
+    try {
+      if (this.file) {
+        attachment = await s3Upload(this.file);
+      }
+      await this.saveNote({
+        content,
+        attachment: attachment || this.state.attachment
+      });
+      this.props.history.push("/");
+    } catch (error) {
+      this.setState({ error, isLoading: false });
+    }
   };
   handleDelete = async (event) => {
     event.preventDefault();
@@ -116,6 +139,7 @@ class Notes extends React.Component {
               disabled={!this.validateForm()}
               text='Save'
               type='submit'
+              onClick={() => this.saveNote(note)}
               isLoading={isLoading}
               loadingText='Saving..'
             />
