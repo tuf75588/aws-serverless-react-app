@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Routes from "./components/Routes";
 import { Auth } from "aws-amplify";
@@ -41,7 +41,7 @@ function App() {
 
   return (
     <>
-      <div className='container App'>
+      <div className='App container'>
         <Navigation
           isAuthenticated={childProps.isAuthenticated}
           onLogout={handleLogout}
