@@ -2,6 +2,7 @@ import React from "react";
 import { ListGroup, PageHeader, ListGroupItem } from "react-bootstrap";
 import { API } from "aws-amplify";
 import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 class Home extends React.Component {
   state = {
     notes: [],
@@ -45,6 +46,14 @@ class Home extends React.Component {
         <div className='lander'>
           <h1>Scratch</h1>
           <p>A simple note taking app</p>
+          <div>
+            <Link to='/login' className='btn btn-info btn-lg'>
+              Login
+            </Link>
+            <Link to='/signup' className='btn btn-success btn-lg'>
+              Signup
+            </Link>
+          </div>
         </div>
       </div>
     );
